@@ -2,7 +2,6 @@ package com.vaasu.cache.impl;
 
 import com.vaasu.cache.Cache;
 
-import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

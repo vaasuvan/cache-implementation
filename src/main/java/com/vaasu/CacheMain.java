@@ -33,7 +33,7 @@ public class CacheMain<K , V > implements Cache<K,V> {
 
     public CacheMain(final int inMemoryCacheSize, final int fileSystemCacheSize, PolicyType policyType) throws IOException {
         this.firstLevelCache = new InMemoryCache<>(inMemoryCacheSize);
-        this.secondLevelCache = new FileSystemCache<K, V>(fileSystemCacheSize);
+        this.secondLevelCache = new FileSystemCache<>(fileSystemCacheSize);
         this.policy = getPolicy(policyType);
     }
 
@@ -52,13 +52,13 @@ public class CacheMain<K , V > implements Cache<K,V> {
     public void putToCache(K key, V value) throws IOException {
 
         if (firstLevelCache.isObjectPresent(key) || firstLevelCache.hasEmptyPlace()) {
-            log.debug(format("Put object with key %s to the 1st level", key));
+            log.debug("====PUT OBJECT WITH KEY {} TO THE 1ST LEVEL===", key);
             firstLevelCache.putToCache(key, value);
             if (secondLevelCache.isObjectPresent(key)) {
                 secondLevelCache.removeFromCache(key);
             }
         } else if (secondLevelCache.isObjectPresent(key) || secondLevelCache.hasEmptyPlace()) {
-            log.debug(format("Put object with key %s to the 2nd level", key));
+            log.debug("====PUT OBJECT WITH KEY {} TO THE 2ND LEVEL====", key);
             secondLevelCache.putToCache(key, value);
         } else {
             // Here we have full cache and have to replace some object with new one according to cache strategy.
@@ -66,7 +66,7 @@ public class CacheMain<K , V > implements Cache<K,V> {
         }
 
         if (!policy.isObjectPresent(key)) {
-            log.debug(format("Put object with key %s to strategy", key));
+            log.debug(format("=======PUT OBJECT WITH KEY %s TO STRATEGY=====", key));
             policy.putObject(key);
         }
     }
@@ -74,11 +74,11 @@ public class CacheMain<K , V > implements Cache<K,V> {
     private void replaceObject(K key, V value) throws IOException {
         K replacedKey = policy.getEvictedKey();
         if (firstLevelCache.isObjectPresent(replacedKey)) {
-            log.debug(format("Replace object with key {} from 1st level", replacedKey));
+            log.debug("====REPLACE OBJECT WITH KEY {} FROM 1ST LEVEL======", replacedKey);
             firstLevelCache.removeFromCache(replacedKey);
             firstLevelCache.putToCache(key, value);
         } else if (secondLevelCache.isObjectPresent(replacedKey)) {
-            log.debug(format("Replace object with key %s from 2nd level", replacedKey));
+            log.debug("====REPLACE OBJECT WITH KEY {}FROM 2ND LEVEL======", replacedKey);
             secondLevelCache.removeFromCache(replacedKey);
             secondLevelCache.putToCache(key, value);
         }
@@ -100,11 +100,11 @@ public class CacheMain<K , V > implements Cache<K,V> {
     @Override
     public void removeFromCache(K key) {
         if (firstLevelCache.isObjectPresent(key)) {
-            log.debug(format("Remove object with key %s from 1st level", key));
+            log.debug("====REMOVE OBJECT WITH KEY {} FROM 1ST LEVEL====", key);
             firstLevelCache.removeFromCache(key);
         }
         if (secondLevelCache.isObjectPresent(key)) {
-            log.debug(format("Remove object with key %s from 2nd level", key));
+            log.debug("=====REMOVE OBJECT WITH KEY {} FROM 2ND LEVEL======", key);
             secondLevelCache.removeFromCache(key);
         }
         policy.removeObject(key);

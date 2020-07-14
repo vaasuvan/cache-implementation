@@ -40,7 +40,7 @@ public class FileSystemCache<K , V > implements Cache<K,V> {
             outputStream.flush();
             objectsStorage.put(key, tmpFile.getName());
         } catch (IOException e) {
-            log.error("Can't write an object to a file " + tmpFile.getName() + ": " + e.getMessage());
+            log.error("#########CAN'T WRITE AN OBJECT TO A FILE #########" + tmpFile.getName() + ": " + e.getMessage());
         }
     }
 
@@ -52,10 +52,10 @@ public class FileSystemCache<K , V > implements Cache<K,V> {
                  ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
                 return (V) objectInputStream.readObject();
             } catch (ClassNotFoundException | IOException e) {
-                log.error(format("Can't read a file. %s: %s", fileName, e.getMessage()));
+                log.error(format("##########CAN'T READ A FILE.########## %s: %s", fileName, e.getMessage()));
             }
         }
-        log.debug(format("Object with key '%s' does not exist", key));
+        log.debug(format("====OBJECT WITH KEY '%s' DOES NOT EXIST=======", key));
         return null;
     }
 
@@ -64,9 +64,9 @@ public class FileSystemCache<K , V > implements Cache<K,V> {
         String fileName = objectsStorage.get(key);
         File deletedFile = new File(tempDir + File.separator + fileName);
         if (deletedFile.delete()) {
-            log.debug(format("Cache file '%s' has been deleted", fileName));
+            log.debug(format("======CACHE FILE '%s' HAS BEEN DELETED======", fileName));
         } else {
-            log.debug(format("Can't delete a file %s", fileName));
+            log.debug(format("######CAN'T DELETE A FILE####### %s", fileName));
         }
         objectsStorage.remove(key);
     }
@@ -93,9 +93,9 @@ public class FileSystemCache<K , V > implements Cache<K,V> {
                 .map(Path::toFile)
                 .forEach(file -> {
                     if (file.delete()) {
-                        log.debug(format("Cache file '%s' has been deleted", file));
+                        log.debug("=======CACHE FILE '{}' HAS BEEN DELETED======", file);
                     } else {
-                        log.error(format("Can't delete a file %s", file));
+                        log.error("#########CAN'T DELETE A FILE #########{}", file);
                     }
                 });
         objectsStorage.clear();
