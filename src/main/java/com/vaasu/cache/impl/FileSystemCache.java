@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.lang.String.format;
 
 public class FileSystemCache<K extends Serializable, V extends Serializable> implements Cache<K , V > {
     Logger log = LoggerFactory.getLogger(FileSystemCache.class);
@@ -53,7 +52,7 @@ public class FileSystemCache<K extends Serializable, V extends Serializable> imp
                  ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
                 return (V) objectInputStream.readObject();
             } catch (ClassNotFoundException | IOException e) {
-                log.error(format("##########CAN'T READ A FILE.########## %s: %s", fileName, e.getMessage()));
+                log.error("##########CAN'T READ A FILE.########## {}: {}", fileName, e.getMessage());
             }
         }
         log.debug("====OBJECT WITH KEY {} DOES NOT EXIST=======", key);
@@ -94,7 +93,7 @@ public class FileSystemCache<K extends Serializable, V extends Serializable> imp
                 .map(Path::toFile)
                 .forEach(file -> {
                     if (file.delete()) {
-                        log.debug("=======CACHE FILE '{}' HAS BEEN DELETED======", file);
+                        log.debug("=======CACHE FILE {} HAS BEEN DELETED======", file);
                     } else {
                         log.error("#########CAN'T DELETE A FILE #########{}", file);
                     }
