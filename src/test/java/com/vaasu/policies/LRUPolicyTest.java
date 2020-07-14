@@ -21,7 +21,7 @@ public class LRUPolicyTest {
 
     @Test
     public void shouldMoveObjectFromCacheTest() throws IOException {
-        cacheMain = new CacheMain<Integer, String>(2, 2, PolicyType.LRU);
+        cacheMain = new CacheMain<>(2, 2, PolicyType.LRU);
 
         // i=0 - Least Recently Used - will be removed
         IntStream.range(0, 4).forEach(i -> {

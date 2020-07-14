@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.lang.String.format;
 
-public class FileSystemCache<K , V > implements Cache<K,V> {
+public class FileSystemCache<K extends Serializable, V extends Serializable> implements Cache<K , V > {
     Logger log = LoggerFactory.getLogger(FileSystemCache.class);
     private final Map<K, String> objectsStorage;
     private final Path tempDir;
@@ -34,9 +34,10 @@ public class FileSystemCache<K , V > implements Cache<K,V> {
     @Override
     public void putToCache(K key, V value) throws IOException {
         File tmpFile = Files.createTempFile(tempDir, "", "").toFile();
-
+        log.debug("======CACHE FILE {} HAS BEEN CREATED======", tmpFile.getName());
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(tmpFile))) {
             outputStream.writeObject(value);
+            log.debug("======VALUES WRITTEN ON FILES====={}=", value);
             outputStream.flush();
             objectsStorage.put(key, tmpFile.getName());
         } catch (IOException e) {

@@ -2,10 +2,11 @@ package com.vaasu.cache.impl;
 
 import com.vaasu.cache.Cache;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class InMemoryCache<K , V > implements Cache<K,V> {
+public class InMemoryCache<K extends Serializable, V extends Serializable> implements Cache<K,V> {
 
     private final Map<K, V> objectsStorage;
     private final int capacity;

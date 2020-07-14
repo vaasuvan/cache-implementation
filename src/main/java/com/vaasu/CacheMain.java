@@ -13,29 +13,19 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.Serializable;
 
-import static java.lang.String.format;
-
 /**
  * This class will be used for archive  both caching mechanism InMemory and FileSystem
  * and Eviction Policy
  * @param <K>
  * @param <V>
  */
-public class CacheMain<K , V > implements Cache<K,V> {
+public class CacheMain<K extends Serializable, V extends Serializable > implements Cache<K,V> {
 
     static Logger log = LoggerFactory.getLogger(CacheMain.class);
 
     private final InMemoryCache<K, V> firstLevelCache;
     private final FileSystemCache<K, V> secondLevelCache;
     private final Policy<K> policy;
-
-    public InMemoryCache<K, V> getFirstLevelCache() {
-        return firstLevelCache;
-    }
-
-    public Policy<K> getPolicy() {
-        return policy;
-    }
 
     public CacheMain(final int inMemoryCacheSize, final int fileSystemCacheSize, PolicyType policyType) throws IOException {
         this.firstLevelCache = new InMemoryCache<>(inMemoryCacheSize);
@@ -45,12 +35,10 @@ public class CacheMain<K , V > implements Cache<K,V> {
 
     private Policy<K> getPolicy(PolicyType policyType) {
         switch (policyType) {
-            case LRU:
-                return new LRUPolicy<K>();
             case LFU:
                 return new LFUPolicy<>();
             default:
-                return new LRUPolicy<K>();
+                return new LRUPolicy<>();
         }
     }
 
@@ -67,12 +55,11 @@ public class CacheMain<K , V > implements Cache<K,V> {
             log.debug("====PUT OBJECT WITH KEY {} TO THE 2ND LEVEL====", key);
             secondLevelCache.putToCache(key, value);
         } else {
-            // Here we have full cache and have to replace some object with new one according to cache strategy.
             replaceObject(key, value);
         }
 
         if (!policy.isObjectPresent(key)) {
-            log.debug(format("=======PUT OBJECT WITH KEY %s TO STRATEGY=====", key));
+            log.debug("=======PUT OBJECT WITH KEY {} TO STRATEGY=====", key);
             policy.putObject(key);
         }
     }
