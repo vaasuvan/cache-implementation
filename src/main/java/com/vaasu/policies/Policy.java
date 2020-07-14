@@ -3,6 +3,11 @@ package com.vaasu.policies;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * This class will pick key of sorted value of  cache-object access-time/or  access-counter
+ * @param <K>
+ */
+
 public abstract class Policy<K> {
     private final Map<K, Long> objectsStorage;
     private final TreeMap<K, Long> sortedObjectsStorage;

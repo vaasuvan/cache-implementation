@@ -15,6 +15,12 @@ import java.io.Serializable;
 
 import static java.lang.String.format;
 
+/**
+ * This class will be used for archive  both caching mechanism InMemory and FileSystem
+ * and Eviction Policy
+ * @param <K>
+ * @param <V>
+ */
 public class CacheMain<K , V > implements Cache<K,V> {
 
     static Logger log = LoggerFactory.getLogger(CacheMain.class);
