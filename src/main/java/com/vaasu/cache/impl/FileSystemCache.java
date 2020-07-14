@@ -45,6 +45,7 @@ public class FileSystemCache<K extends Serializable, V extends Serializable> imp
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public V getFromCache(K key) {
         if (isObjectPresent(key)) {
             String fileName = objectsStorage.get(key);
