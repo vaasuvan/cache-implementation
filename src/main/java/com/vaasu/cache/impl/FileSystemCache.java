@@ -55,7 +55,7 @@ public class FileSystemCache<K , V > implements Cache<K,V> {
                 log.error(format("##########CAN'T READ A FILE.########## %s: %s", fileName, e.getMessage()));
             }
         }
-        log.debug(format("====OBJECT WITH KEY '%s' DOES NOT EXIST=======", key));
+        log.debug("====OBJECT WITH KEY {} DOES NOT EXIST=======", key);
         return null;
     }
 
@@ -64,9 +64,9 @@ public class FileSystemCache<K , V > implements Cache<K,V> {
         String fileName = objectsStorage.get(key);
         File deletedFile = new File(tempDir + File.separator + fileName);
         if (deletedFile.delete()) {
-            log.debug(format("======CACHE FILE '%s' HAS BEEN DELETED======", fileName));
+            log.debug("======CACHE FILE {} HAS BEEN DELETED======", fileName);
         } else {
-            log.debug(format("######CAN'T DELETE A FILE####### %s", fileName));
+            log.debug("######CAN'T DELETE A FILE####### {}", fileName);
         }
         objectsStorage.remove(key);
     }
